@@ -27,7 +27,7 @@ To a person like me, who had prepared to be asked questions on DSA, OOPS, DBMS a
 Alright, we have this line of code. Staring at this line of code even for a day will not lead us to any answer, but the computer does understand what to do when we give this line of code right? Well, before this line of code is given to the computer, it is first converted assembly, so let's look at what kind of assembly code we get from it.
 
 
-Let's use the ![Godbolt](https://godbolt.org/) compiler explorer for this task.
+Let's use the [Godbolt](https://godbolt.org/) compiler explorer for this task.
 <!--
 ![](img1.png)
 
@@ -38,7 +38,7 @@ Hmm, interesting. This line of code only translates to one assembly instruction,
 another line single of code, which we do not understand the working of.
 
 
-We know that the current code will not compile due to the absence of main function, what if we put this line inside a main funtion? --> -->
+We know that the current code will not compile due to the absence of main function, what if we put this line inside a main funtion? -->
 
 
 <!-- %%
@@ -71,7 +71,7 @@ Each assembly instruction is usually one of the following type:
 %% -->
 
 
-Each assembly instruction is usually one of the following type[^1]:
+Each assembly instruction is usually one of the following type<sup>[1](https://en.wikipedia.org/wiki/Addressing_mode)</sup>:
 ```
 INS
 INS DEST
@@ -188,8 +188,6 @@ I hope that this blog was just as educational and interesting to you as it was t
 
 Thanks to [Siddharth Bhat](https://www.linkedin.com/in/siddharth-bhat-a0bbb1255/) for proof-reading and providing suggestions for this post.
 
-
-[^1]: https://en.wikipedia.org/wiki/Addressing_mode
 
 
 

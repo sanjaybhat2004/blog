@@ -15,7 +15,7 @@
   
   <link rel="canonical" href="http://example.com/int-a-5/">
   
-  <meta name="description" content="In a recent interview, I was asked this question: Consider this line of code: int a &amp;#x3D; 5;  Explain it’s inner working.  To a person like me, who h">
+  <meta name="description" content="In a recent interview, I was asked this question: Consider this line of code: int a &amp;#x3D; 5;   Explain it’s inner working. To a person like me, who h">
   
   
   <meta name="author" content="John Doe">
@@ -26,14 +26,14 @@
   <meta property="og:type" content="article" />
   <meta property="og:title" content="int a = 5;" />
   
-  <meta property="og:description" content="In a recent interview, I was asked this question: Consider this line of code: int a &amp;#x3D; 5;  Explain it’s inner working.  To a person like me, who h">
+  <meta property="og:description" content="In a recent interview, I was asked this question: Consider this line of code: int a &amp;#x3D; 5;   Explain it’s inner working. To a person like me, who h">
   
   <meta property="og:url" content="http://example.com/int-a-5/" />
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="int a = 5;">
   
-  <meta name="twitter:description" content="In a recent interview, I was asked this question: Consider this line of code: int a &amp;#x3D; 5;  Explain it’s inner working.  To a person like me, who h">
+  <meta name="twitter:description" content="In a recent interview, I was asked this question: Consider this line of code: int a &amp;#x3D; 5;   Explain it’s inner working. To a person like me, who h">
   
   
   
@@ -193,38 +193,50 @@
 <p>Consider this line of code:</p>
 <pre><code>int a &#x3D; 5;</code></pre>
 
-<p>Explain it’s inner working. </p>
+
+<p>Explain it’s inner working.</p>
 <p>To a person like me, who had prepared to be asked questions on DSA, OOPS, DBMS and OS, seeing a question like this was certainly not in my wildest expectations. Although I was able to give a layman answer on how it would work, after the interview ended it evoked a curiosity in me to explore how the computer actually handles this. The fact that this was a line of code I had probably written thousands of times, yet I had not fully understood what happens under the hood was something I found unacceptable, hence I decided to write this blog to document my learning as well as share it with others.</p>
 <p>Alright, we have this line of code. Staring at this line of code even for a day will not lead us to any answer, but the computer does understand what to do when we give this line of code right? Well, before this line of code is given to the computer, it is first converted assembly, so let’s look at what kind of assembly code we get from it.</p>
-<p>Let’s use the godbolt compiler explorer for this task.</p>
-<p><img src="/img1.png"></p>
-<!-- ![[Pasted image 20240812181516.png]] -->
+<p>Let’s use the <a target="_blank" rel="noopener" href="https://godbolt.org/">Godbolt</a> compiler explorer for this task.</p>
+<!--
+![](img1.png)
 
-<p>Hmm, interesting. This line of code only translates to one assembly instruction, and we have made no progress into getting our answer either, again getting<br>another line single of code, which we do not understand the working of. </p>
-<p>We know that the current code will not compile due to the absence of main function, what if we put this line inside a main funtion?</p>
-<!-- %% 
+
+<!-- ![[Pasted image 20240812181516.png]] -->
+<!--
+Hmm, interesting. This line of code only translates to one assembly instruction, and we have made no progress into getting our answer either, again getting
+another line single of code, which we do not understand the working of.
+
+
+We know that the current code will not compile due to the absence of main function, what if we put this line inside a main funtion? --> -->
+
+
+<!-- %%
 Also let us remind ourselves, this is not the only way to create an integer variable, there is one more way by doing the memory allocation at runtime, let us see what it gives. %%
+
 
 %%  -->
 <!-- Ohh, trying to do dynamic memory allocation seems to fail, and  if we dig around deeper, we see that it is a language limitation https://stackoverflow.com/a/3025142. That is okay, since we do not care about its staticness, let us do it inside the main function. %% -->
 
 
 
+
+
+
 <!-- ![[Pasted image 20240812185105.png]] -->
 
+
 <p><img src="/img2.png"></p>
-<p>Bam! This small change seems to dump many scary lines of assembly at us, and the instruction which was there easrlier seems to have totally dissapeared. </p>
-<p>Consider the first case where we had a global variable. We had the <code>.long</code> instruction. This <a target="_blank" rel="noopener" href="https://docs.oracle.com/cd/E26502_01/html/E28388/eoiyg.html">https://docs.oracle.com/cd/E26502_01/html/E28388/eoiyg.html</a> website tells us that “<strong>Directives</strong> are commands that are part of the assembler syntax but are not related to the x86 processor instruction set. All assembler directives begin with a period (.) (ASCII 0x2E).”</p>
-<p>&#x2F;&#x2F; go deeper into how .long directive is converted to true assembly, and how it becomes machine code, I want alllll of that, but cant find resource anywhere which explains properly<br>&#x2F;&#x2F; reviewer sir pls give some suggestion on where to find</p>
-<p>Okay, now let us take the second case, where we declared the variable inside the main function, and got some assembly code thrown at us. First, let us have a small primer on assembly, so that we can try to decode the meaning of the instructions. </p>
-<!-- 
+<p>Bam! This small code seems to dump many scary lines of assembly at us, let us go through each of it line by line. First, let us have a small primer on assembly, so that we can try to decode the meaning of the instructions.</p>
+<!--
 %%
 Each assembly instruction is usually one of the following type:
-```INS OP1 OP2 OP3``` where ```INS``` specifies the type of instruction being given, and ```OP1, OP2, OP3``` are the operands being operated on. Some instructions may take only one operand, while others may take zero or all three operands too. 
+```INS OP1 OP2 OP3``` where ```INS``` specifies the type of instruction being given, and ```OP1, OP2, OP3``` are the operands being operated on. Some instructions may take only one operand, while others may take zero or all three operands too.
 %% -->
 
-<p>Each assembly instruction is usually one of the following type:</p>
-<pre><code>INS 
+
+<p>Each assembly instruction is usually one of the following type<sup><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Addressing_mode">1</a></sup>:</p>
+<pre><code>INS
 INS DEST
 INS DEST, SRC
 INS DEST, SRC, EXTRA
@@ -232,33 +244,46 @@ INS DEST, SRC, EXTRA
 <p>For example, the <code>MOV</code> instruction is of the type 3rd type, where we specify the address of the <code>SRC</code>, and it moves the value present in that address to the address given in <code>DEST</code>.</p>
 <p>We also need to have some knowledge about registers. Registers can be basically thought of as variables, which are the “closest” and most easily accessible by the processor. There are many registers available to us, however the only ones that concern us now are EAX, ESP, EBP.</p>
 <p>Now what arcane meanings and full forms do these have? Let’s see.</p>
-<p>EAX stands for <strong>E</strong>xtended <strong>A</strong>ccumulator Register.<br>Extended, indicating that this was a extended 32 bit register instead of the original 16 bit AX register.<br>Accumulator, because it is the primary register used in arithmetic operations.<br>X, because AX is <em>pair</em> of smaller 8 bit registers known as AL and AH.</p>
+<p>EAX stands for <strong>E</strong>xtended <strong>A</strong>ccumulator Register.</p>
+<p>Extended, indicating that this was a extended 32 bit register instead of the original 16 bit AX register.<br>Accumulator, because it is the primary register used in arithmetic operations.<br>X, because AX itself is a <em>pair</em> of smaller 8 bit registers known as AL and AH.</p>
 <!-- %%The other 3 registers in the first 4 registers have similar names too, but in the interest of not over loading with new information and not being able to process the important information, I will not mention them here. Interested people can check it out here: https://stackoverflow.com/questions/892928/why-are-x86-registers-named-the-way-they-are.
 %% -->
 
 
-<p>EBP stands for Extended Base Pointer and ESP stands for Extended Stack Pointer. In the code that we wrote above, we can see registers such as RBP and RSP. In fact they are the 64 bit version of EBP and ESP, and we will use them interchangeably here, since the context is already understood. </p>
-<p>We now have encountered one of the big guns in the scene of process memory management, the Stack. The Stack is the one which overflows your non-base-case-handled recursive calls, as well as helping you return values in the functions you write.  </p>
-<p>The Stack is a data structure, which allows you to add values only at one end, and allows you to remove only the top value (which is at the same end). Imagine a person carrying a “stack” of dining plates. He can only add plates at the top (or else it would fall down and make a mess) and he can only remove the plates at the top. The stack in our program also works in a similar way, except for a small quirk that it is actually inverted, in the sense that it grows downward. Downward here means that as the stack grows, the magnitude of the address of the top of stack decreases. </p>
-<p>&#x2F;&#x2F; insert image of a stack here</p>
-<p>Now that you know what a stack is, let’s see what EBP and ESP are. </p>
+
+
+<p>EBP stands for Extended Base Pointer and ESP stands for Extended Stack Pointer. In the code that we wrote above, we can see registers such as RBP and RSP. In fact they are the 64 bit version of EBP and ESP, and we will use them interchangeably here, since the context is already understood.</p>
+<p>We now have encountered one of the big guns in the scene of process memory management, the Stack. The Stack is the one which overflows your non-base-case-handled recursive calls, as well as helping you return values in the functions you write. </p>
+<p>The Stack is a data structure, which allows you to add values only at one end, and allows you to remove only the top value (which is at the same end). Imagine a person carrying a “stack” of dining plates. He can only add plates at the top (or else it would fall down and make a mess) and he can only remove the plates at the top. The stack in our program also works in a similar way, except for a small quirk that it is actually inverted, in the sense that it grows downward. Downward here means that as the stack grows, the magnitude of the address of the top of stack decreases.</p>
+<p>Now that you know what a stack is, let’s see what EBP and ESP are.</p>
 <p>EBP is the pointer which points to the base of the current stack “frame”. A stack frame can be thought of as a range of addresses on the stack which is associated corresponding to each function call, and is no longer valid after the function finishes. The EBP register is also used when we are finding out the addresses of the function arguments, which are located at a fixed offset to it.</p>
-<p>ESP is the pointer which points to the top of stack. It is used when we want to push values to the stack. </p>
+<p>ESP is the pointer which points to the top of stack. It is used when we want to push values to the stack.</p>
+<p>If you want to know more about assembly level programming, check <a target="_blank" rel="noopener" href="https://www.cs.dartmouth.edu/~sergey/cs258/tiny-guide-to-x86-assembly.pdf">this</a> out.</p>
+<p><img src="/img3.png"></p>
+<p><img src="/img4.png"></p>
 <p>Alright. Now that we know how the stack works, let us go back to the code and understand it line by line.</p>
 <ul>
-<li><p><code>push rbp</code>. This line tells to push the current value of the rbp register to the top of the stack. Anytime we need to create a new stack frame, this instruction is performed, in order to save the address of the RBP of the current stack frame. This also means that the value of RSP is automatically incremented to point to the new stack top.</p>
-</li>
-<li><p><code>mov rbp, rsp</code> copies the value of RSP register, and puts it into RBP register, so that both of them have the same address. This new address will be the Base pointer for the new stack frame being created for the current function call, which is the <code>int main()</code> function call here.  </p>
-</li>
-<li><p><code>mov DWORD PTR [rbp-4], 5</code>: This instruction asks to move the value <code>5</code> to the address given by <code>[rbp-4]</code>. Notice that since the stack grows downward, we need to subtract the address in order to get the address of the next top element of the stack.  The keyword <code>DWORD</code> here tells us that it is a 32 bit data type, and <code>QWORD</code> would be used instead, if it was 64 bit. </p>
-</li>
-<li><p><code>mov eax, 0</code> another thing you need to know, is that whatever the value the function is returning, must always be in the eax register. Also, during the lifetime of a function, it may change the values of any register, but before it exits, it must set all the other registers except EAX to whatever value they had previously, before the function was called. Since we need to return the value 0, we assign the value 0 to the eax register. </p>
+<li><code>push rbp</code>. This line tells to push the current value of the rbp register to the top of the stack. Anytime we need to create a new stack frame, this instruction is performed, in order to save the address of the RBP of the current stack frame. This also means that the value of RSP is automatically incremented to point to the new stack top.</li>
+</ul>
+<p><img src="/img5.png"></p>
+<ul>
+<li><code>mov rbp, rsp</code> copies the value of RSP register, and puts it into RBP register, so that both of them have the same address. This new address will be the Base pointer for the new stack frame being created for the current function call, which is the <code>int main()</code> function call here.</li>
+</ul>
+<p><img src="/img6.png"></p>
+<ul>
+<li><code>mov DWORD PTR [rbp-4], 5</code>: This instruction asks to move the value <code>5</code> to the address given by <code>[rbp-4]</code>. Notice that since the stack grows downward, we need to subtract the address in order to get the address of the next top element of the stack.  The keyword <code>DWORD</code> here tells us that it is a 32 bit data type, and <code>QWORD</code> would be used instead, if it was 64 bit.</li>
+</ul>
+<p><img src="/img7.png"></p>
+<ul>
+<li><p><code>mov eax, 0</code> another thing you need to know, is that whatever the value the function is returning, must always be in the eax register. Also, during the lifetime of a function, it may change the values of any register, but before it exits, it must set all the other registers except EAX to whatever value they had previously, before the function was called. Since we need to return the value 0, we assign the value 0 to the eax register.</p>
 </li>
 <li><p><code>ret</code> : this exits the function and sets control flow to the place where the function was called.</p>
 </li>
 </ul>
-<p>Phew! so much going on behind the scenes in just a single line of code. We may certainly now ask, okay, but what is happening behind the scenes of command <code>mov DWORD PTR [..], 5</code>? For that we will need to go one more layer deeper. But the gist of it is that Assembly Instructions form an almost one-one correspondance with the op codes present on the processor, and the way these op codes are implemented on the processor is by hard coding the Logic Gates to get the required work done. &#x2F;&#x2F; reviewer please correct me if im wrong here, im basically guessing :skull:<br>We will not be going about that in this post.</p>
-<p>![[Pasted image 20240812184457.png]]</p>
+<p><img src="/img9.png"></p>
+<p>Phew! so much going on behind the scenes in just a single line of code. We may certainly now ask, okay, but what is happening behind the scenes of command <code>mov DWORD PTR [..], 5</code>? For that we will need to go one more layer deeper. But the gist of it is that Assembly Instructions form an almost one-one correspondance with the op codes present on the processor, and the way these op codes are implemented on the processor is by hard coding the logic gates to get the required work done. The machine code is processed in a fetch decode execute cycles. We will not be going about that in this post.</p>
+<p>I hope that this blog was just as educational and interesting to you as it was to me. See ya around!</p>
+<p>Thanks to <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/siddharth-bhat-a0bbb1255/">Siddharth Bhat</a> for proof-reading and providing suggestions for this post.</p>
 
   <p> — Aug 13, 2024</p>
   
@@ -266,11 +291,11 @@ INS DEST, SRC, EXTRA
 
         </div>
         <div class="row mt-2">
-  <!-- <h3>Search</h3> -->
-  <!-- <div><input id="search-text" title="search" class="search-text" type="text" placeholder="search......"></div> -->
-  <!-- <div style="margin-top: 1.5rem;"> -->
-    <!-- <ul id="result"></ul> -->
-  <!-- </div> -->
+  <h3>Search</h3>
+  <div><input id="search-text" title="search" class="search-text" type="text" placeholder="search......"></div>
+  <div style="margin-top: 1.5rem;">
+    <ul id="result"></ul>
+  </div>
 </div>
         <div class="row mt-2">
   
