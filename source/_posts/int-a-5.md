@@ -106,7 +106,7 @@ X, because AX itself is a *pair* of smaller 8 bit registers known as AL and AH.
 EBP stands for Extended Base Pointer and ESP stands for Extended Stack Pointer. In the code that we wrote above, we can see registers such as RBP and RSP. In fact they are the 64 bit version of EBP and ESP, and we will use them interchangeably here, since the context is already understood.
 
 
-We now have encountered one of the big guns in the scene of process memory management, the Stack. The Stack is the one which overflows your non-base-case-handled recursive calls, as well as helping you return values in the functions you write. 
+We now have encountered one of the big guns in the scene of process memory management, the Stack. The Stack is the one which overflows your non-base-case-handled recursive calls.
 
 
 The Stack is a data structure, which allows you to add values only at one end, and allows you to remove only the top value (which is at the same end). Imagine a person carrying a "stack" of dining plates. He can only add plates at the top (or else it would fall down and make a mess) and he can only remove the plates at the top. The stack in our program also works in a similar way, except for a small quirk that it is actually inverted, in the sense that it grows downward. Downward here means that as the stack grows, the magnitude of the address of the top of stack decreases.
