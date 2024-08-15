@@ -21,7 +21,7 @@ Consider this line of code:
 Explain it's inner working.
 
 
-To a person like me, who had prepared to be asked questions on DSA, OOPS, DBMS and OS, seeing a question like this was certainly not in my wildest expectations. Although I was able to give a layman answer on how it would work, after the interview ended it evoked a curiosity in me to explore how the computer actually handles this. The fact that this was a line of code I had probably written thousands of times, yet I had not fully understood what happens under the hood was something I found unacceptable, hence I decided to write this blog to document my learning as well as share it with others.
+To a person like me, who had prepared to be asked questions on DSA, OOPS, DBMS and OS, seeing a question like this was certainly not in my wildest expectations. Although I was able to give a layman answer on how it would work, after the interview ended it evoked a curiosity in me to explore how the computer actually handles this. The fact that this was a line of code I had probably written thousands of times, yet I had not fully understood what happens under the hood was something I did not like, hence I decided to write this blog to document my learning as well as share it with others.
 
 
 Alright, we have this line of code. Staring at this line of code even for a day will not lead us to any answer, but the computer does understand what to do when we give this line of code right? Well, before this line of code is given to the computer, it is first converted assembly, so let's look at what kind of assembly code we get from it.
