@@ -180,6 +180,9 @@ Alright. Now that we know how the stack works, let us go back to the code and un
 
 Phew! so much going on behind the scenes in just a single line of code. We may certainly now ask, okay, but what is happening behind the scenes of command ```mov DWORD PTR [..], 5```? For that we will need to go one more layer deeper. But the gist of it is that Assembly Instructions form an almost one-one correspondance with the op codes present on the processor, and the way these op codes are implemented on the processor is by hard coding the logic gates to get the required work done. The machine code is processed in a fetch decode execute cycles. We will not be going about that in this post.
 
+In order to test your understanding of this concept, try to predict the output of this program.
+
+![](img10.png)
 
 
 
