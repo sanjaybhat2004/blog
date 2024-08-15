@@ -155,7 +155,7 @@ Alright. Now that we know how the stack works, let us go back to the code and un
 
 
 
-- ```mov DWORD PTR [rbp-4], 5```: This instruction asks to move the value ```5``` to the address given by ```[rbp-4]```. Notice that since the stack grows downward, we need to subtract the address in order to get the address of the next top element of the stack.  The keyword ```DWORD``` here tells us that it is a 32 bit data type, and ```QWORD``` would be used instead, if it was 64 bit.
+- ```mov DWORD PTR [rbp-4], 5```: This instruction asks to move the value ```5``` to the address given by ```[rbp-4]```. Notice that since the stack grows downward, we need to subtract the address in order to get the address of the next top element of the stack.  The keyword ```DWORD``` here tells us that it is a 32 bit data type, (and is also the reason we are subtracting 4, since int is 4 bytes) and ```QWORD``` would be used instead, if it was 64 bit.
 
 
 ![](img7.png)
