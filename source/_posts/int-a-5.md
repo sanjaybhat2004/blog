@@ -80,10 +80,10 @@ INS DEST, SRC, EXTRA
 ```
 
 
-For example, the ```MOV``` instruction is of the type 3rd type, where we specify the address of the ```SRC```, and it moves the value present in that address to the address given in ```DEST```.
+For example, the ```MOV``` instruction is of the type 3rd type, where we specify the address of the ```SRC```, and it moves the value present in that address to the address given in ```DEST```. 
 
 
-We also need to have some knowledge about registers. Registers can be basically thought of as variables, which are the "closest" and most easily accessible by the processor. There are many registers available to us, however the only ones that concern us now are EAX, ESP, EBP.
+We also need to have some knowledge about registers. Registers can be basically thought of as variables, which are in predefined memory regions  which are the "closest" and most easily accessible by the processor. There are many registers available to us, however the only ones that concern us now are EAX, ESP, EBP. Note that whenever write the name of the register, we mean the value in it, however if it is enclosed in ```[]``` brackets then we are referencing the value located in that register.
 
 
 Now what arcane meanings and full forms do these have? Let's see.
@@ -103,7 +103,8 @@ X, because AX itself is a *pair* of smaller 8 bit registers known as AL and AH.
 
 
 
-EBP stands for Extended Base Pointer and ESP stands for Extended Stack Pointer. In the code that we wrote above, we can see registers such as RBP and RSP. In fact they are the 64 bit version of EBP and ESP, and we will use them interchangeably here, since the context is already understood.
+EBP stands for Extended Base Pointer and ESP stands for Extended Stack Pointer. In the code that we wrote above, we can see registers such as RBP and RSP. In fact EBP and ESP are the 32 bit version of RBP and RSP, and we will use them interchangeably here, since the context is already understood.
+
 
 
 We now have encountered one of the big guns in the scene of process memory management, the Stack. The Stack is the one which overflows your non-base-case-handled recursive calls.
@@ -119,7 +120,7 @@ The Stack is a data structure, which allows you to add values only at one end, a
 Now that you know what a stack is, let's see what EBP and ESP are.
 
 
-EBP is the pointer which points to the base of the current stack "frame". A stack frame can be thought of as a range of addresses on the stack which is associated corresponding to each function call, and is no longer valid after the function finishes. The EBP register is also used when we are finding out the addresses of the function arguments, which are located at a fixed offset to it.
+EBP is the pointer which points to the base of the current stack "frame". A stack frame (which can very in size) can be thought of as a range of addresses on the stack which contains memory space for each function call to store some variables or data, and is no longer valid after the function finishes. The EBP register is also used when we are finding out the addresses of the function arguments, which are located at a fixed offset to it.
 
 
 ESP is the pointer which points to the top of stack. It is used when we want to push values to the stack.
@@ -139,7 +140,7 @@ If you want to know more about assembly level programming, check [this](https://
 Alright. Now that we know how the stack works, let us go back to the code and understand it line by line.
 
 
--  ```push rbp```. This line tells to push the current value of the rbp register to the top of the stack. Anytime we need to create a new stack frame, this instruction is performed, in order to save the address of the RBP of the current stack frame. This also means that the value of RSP is automatically incremented to point to the new stack top.
+-  ```push rbp```. This line tells to push the current value of the rbp register to the top of the stack. Anytime we need to create a new stack frame, this instruction is performed, in order to save the address of the RBP of the current stack frame. This is required since after the current function call we need to set it back to the previous stack frame’s base address. This also means that the value of RSP is automatically incremented to point to the new stack top.
 
 
 ![](img5.png)
@@ -170,7 +171,7 @@ Alright. Now that we know how the stack works, let us go back to the code and un
 
 
 
-- ```ret``` : this exits the function and sets control flow to the place where the function was called.
+- ```ret``` : this exits the function and sets control flow to the place where the function was called. This destroys the topmost stack frame by undoing the operations that happened in this function call.
 
 
 ![](img9.png)
@@ -178,7 +179,7 @@ Alright. Now that we know how the stack works, let us go back to the code and un
 
 
 
-Phew! so much going on behind the scenes in just a single line of code. We may certainly now ask, okay, but what is happening behind the scenes of command ```mov DWORD PTR [..], 5```? For that we will need to go one more layer deeper. But the gist of it is that Assembly Instructions form an almost one-one correspondance with the op codes present on the processor, and the way these op codes are implemented on the processor is by hard coding the logic gates to get the required work done. The machine code is processed in a fetch decode execute cycles. We will not be going about that in this post.
+Phew! so much going on behind the scenes in just a single line of code. We may certainly now ask, okay, but what is happening behind the scenes of command ```mov DWORD PTR [..], 5```? For that we will need to go one more layer deeper. But the gist of it is that Assembly Instructions form an almost one-one correspondance with the op codes present on the processor, and the way these op codes are implemented on the processor is by hard coding the logic gates to get the required work done. It is hard to even imagine the scale of this, when even a usual processor nowadays has 10B transistors. The machine code is processed in a fetch decode execute cycles, where the instruction is fetched, decoded and then executed. We will not be going about that in this post.
 
 In order to test your understanding of this concept, try to predict the output of this program.
 
