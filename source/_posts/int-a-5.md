@@ -80,7 +80,7 @@ INS DEST, SRC, EXTRA
 ```
 
 
-For example, the ```MOV``` instruction is of the type 3rd type, where we specify the address of the ```SRC```, and it moves the value present in that address to the address given in ```DEST```. 
+For example, the ```MOV``` instruction is of the 3rd type, where we specify the address of the ```SRC```, and it moves the value present in that address to the address given in ```DEST```. 
 
 
 We also need to have some knowledge about registers. Registers can be basically thought of as variables, which are in predefined memory regions  which are the "closest" and most easily accessible by the processor. There are many registers available to us, however the only ones that concern us now are EAX, ESP, EBP. Note that whenever write the name of the register, we mean the value in it, however if it is enclosed in ```[]``` brackets then we are referencing the value located in that register.
